@@ -3,7 +3,8 @@
 	Should only work with strings and lists and have no coupling with the UI or controller
 */
 
-SYMBOLS = ["0","1","2","3","4","5","6","7","8","9","+","-","*","/","="]
+const SYMBOLS = ["0","1","2","3","4","5","6","7","8","9","+","-","*","/","="]
+const OPERATORS = ["+","-","*","/","="]
 
 /*	generatePossibilities returns a list of all possible solutions for any given puzzle state
 	Parameters:
@@ -43,12 +44,51 @@ function generatePossibilities(code, exclude, musthave) {
 		isValid("3??=2=2") returns false due to there being 2 equals signs
 */
 function isValid(code) {
-	// TODO: Implement function using the following rules:
-	//		1. Only the symbols in SYMBOLS, plus "?" are allowed
-	//		2. Only 0 or 1 equals sign(s) allowed
-	//		3. If there is an equals sign, no operators should appear on the right hand side
-	//		4. The last character cannot be an operator
-	//		5. Disallow certain operator pairings, specifically: "+*", "+/", "+=", "-*", "-/", "-=", "*=", "/=", "=*", "=/" 
+	// 1. Only the symbols in SYMBOLS, plus "?" are allowed
+	for (var c of code) {
+		if (!SYMBOLS.includes(c) && c != "?") {
+			return false
+		}
+	}
+	
+	// 2. The last character cannot be an operator
+	if (OPERATORS.includes(code[code.length - 1])) {
+		return false
+	}
+	
+	// 3. The first character cannot be a non-unary operator
+	if (["*", "/", "="].includes(code[0])) {
+		return false
+	}
+	
+	// 4. Disallow certain operator pairings except where allowed by unary + and -
+	const DISALLOWED_PAIRINGS = ["+*", "+/", "+=", "-*", "-/", "-=", "*=", "/=", "=*", "=/"]
+	for (var pair of DISALLOWED_PAIRINGS) {
+		if (code.includes(pair)) {
+			return false
+		}
+	}
+	
+	// 5. Only 0 or 1 equals sign(s) allowed
+	var equalsSignCount = strCount(code, "=")
+	if (equalsSignCount > 1) {
+		return false
+	}
+	
+	// 6. If there is an equals sign, no operators should appear on the right hand side except unary operators
+	// TODO: The case of multiple unary operators is not handled here
+	if (equalsSignCount == 1) {
+		var tokens = code.split("=")
+		if (OPERATORS.includes(tokens[1]) && !["+","-"].includes(tokens[1])) {
+			return false
+		}
+		for (var c of tokens[1].substring(1)) {
+			if (OPERATORS.includes(c)) {
+				return false
+			}
+		}
+	}
+	
 	return true
 }
 
