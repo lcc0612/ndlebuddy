@@ -34,16 +34,16 @@ window.onload = function() {
 */
 function buildGUI() {
 	// The SYMBOLS variable is populated in logic.js
-	for (var c of SYMBOLS.concat(["?","Del"])) {
+	for (var c of SYMBOLS.concat(["?","Del","Clear"])) {
 		var btn = document.createElement("button")
 		btn.innerHTML = c
 		btn.setAttribute("class", "query-control-button")
 		btn.setAttribute("buttonValue", c)
-		btn.onclick = queryControlButtonPressed;
+		btn.onclick = queryControlButtonPressed
 		queryControlsDiv.appendChild(btn)
 		
 		if (c == "9") {
-			queryControlsDiv.innerHTML += "<br>"
+			queryControlsDiv.appendChild(document.createElement("br"))
 		}
 	}
 	
@@ -71,7 +71,33 @@ function guess() {
 */
 
 function queryControlButtonPressed() {
-	// TODO: Implement function
+	var value = this.getAttribute("buttonValue")
+	if (value != "Del" && value != "Clear") {
+		query += value
+	}
+	else if (value == "Del") {
+		if (query.length > 0) {
+			query = query.substring(0, query.length-1)
+		}
+	}
+	else if (value == "Clear") {
+		query = ""
+	}
+	redrawQueryDiv()
+}
+
+
+/*	redrawQueryDiv fills the lozenges into the query div based on the query variable
+*/
+function redrawQueryDiv() {
+	queryDiv.innerHTML = ""
+	for (var c of query) {
+		var lozenge = document.createElement("div")
+		lozenge.innerHTML = c
+		lozenge.setAttribute("class", "guess-lozenge")
+		
+		queryDiv.appendChild(lozenge)
+	}
 }
 
 
