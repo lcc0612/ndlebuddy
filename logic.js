@@ -160,9 +160,24 @@ function containsExclusions(code, exclude) {
 		1. There should be at least one "?" in the code
 	Example use case:
 		substituteFirstUnknown("1+?=?", exclude="34567-")
-		returns ["1+1=?", "1+2=?", "1+8=?", "1+9=?", "1++=?", "1+*=?", "1+/=?"]
+		returns ["1+1=?", "1+2=?", "1+8=?", "1+9=?", "1+0=?", "1++=?", "1+*=?", "1+/=?", "1+==?"]
 */
 function substituteFirstUnknown(code, exclude) {
-	// TODO: Implement function
-	return []
+	var results = []
+	var qnMarkIdx = code.indexOf("?")
+	
+	if (qnMarkIdx == -1) {
+		return []
+	}
+	
+	var left = code.substring(0,qnMarkIdx)
+	var right = code.substring(qnMarkIdx+1)
+	
+	for (var c of SYMBOLS) {
+		if (!exclude.includes(c)) {
+			results.push(left + c + right)
+		}
+	}
+	
+	return results
 }

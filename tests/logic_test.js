@@ -1,5 +1,4 @@
 describe("logic.js :: isValid() Test", function() {
-	
 	describe("Rule 1 - Only allowed symbols should appear", function() {
 		it("Statement with only allowed symbols", function() {
 			chai.assert.isTrue(isValid("1+2+3+4"))
@@ -162,6 +161,38 @@ describe("logic.js :: containsExclusions() test", function() {
 		})
 		it("Empty equation", function() {
 			chai.assert.isFalse(containsExclusions("", ""))
+		})
+	})
+})
+
+describe("logic.js :: substituteFirstUnknown() test", function() {
+	describe("Basic Tests", function() {
+		it("Single Question Mark, No exclusions", function() {
+			chai.assert.sameMembers(substituteFirstUnknown("?",""), SYMBOLS)
+		})
+		it("Single Question Mark, All excluded", function() {
+			chai.assert.isEmpty(substituteFirstUnknown("?", SYMBOLS))
+		})
+		it("Single Question Mark, Some exclusions", function() {
+			chai.assert.sameMembers(substituteFirstUnknown("?", "24567+-"), ["1","3","8","9","0","*","/","="])
+		})
+		it("Empty String", function() {
+			chai.assert.isEmpty(substituteFirstUnknown("", ""))
+		})
+	})
+	
+	describe("Longer strings", function() {
+		it("Second question mark not clobbered", function() {
+			chai.assert.sameMembers(substituteFirstUnknown("??", "123789+-="), ["0?","4?","5?","6?","*?","/?"])
+		})
+		it("Question Mark and other symbols, all excluded", function() {
+			chai.assert.isEmpty(substituteFirstUnknown("1?", SYMBOLS))
+		})
+		it("Question Mark and other symbols, some exclusions", function() {
+			chai.assert.sameMembers(substituteFirstUnknown("1?", "345789*/="), ["10","11","12","16","1+","1-"])
+		})
+		it("Multiple question marks, all excluded", function() {
+			chai.assert.isEmpty(substituteFirstUnknown("???", SYMBOLS))
 		})
 	})
 })
