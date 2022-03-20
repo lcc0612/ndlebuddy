@@ -93,7 +93,7 @@ function isValid(code) {
 }
 
 /*	isCorrect returns true if the given code is a complete equation that is mathematically correct
-	Prerequisites:
+	Prerequisites (Unchecked):
 		1. The code must be valid per the rules of isValid()
 		2. There are no "?"s in the code
 		3. The given code must contain an equals sign
@@ -102,7 +102,13 @@ function isValid(code) {
 		isCorrect("4*5=2") returns false
 */
 function isCorrect(code) {
-	// TODO: Implement function
-	return true
+	var tokens = code.split("=")
+	try {
+		var lhs = eval(tokens[0])
+		var rhs = eval(tokens[1])
+		return lhs == rhs
+	}
+	catch (err) {
+		return false
+	}
 }
-

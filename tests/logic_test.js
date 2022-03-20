@@ -81,3 +81,33 @@ describe("logic.js :: isValid() Test", function() {
 		});
 	})
 })
+
+
+describe("logic.js :: isCorrect() test", function() {
+	describe("Correct Equations", function() {
+		it("Simple correct equation", function() {
+			chai.assert.isTrue(isCorrect("1+2=3"))
+		})
+		it("Simple correct equation with division", function() {
+			chai.assert.isTrue(isCorrect("6/2=3"))
+		})
+		it("Simple correct equation with multiple operators", function() {
+			chai.assert.isTrue(isCorrect("1+3+4-2=6"))
+		})
+		it("Correct equation involving order of operations considerations", function() {
+			chai.assert.isTrue(isCorrect("1+6/2+4=8"))
+		})
+	})
+	
+	describe("Wrong Equations", function() {
+		it("Simple incorrect equation", function() {
+			chai.assert.isFalse(isCorrect("1+2=4"))
+		})
+		it("Incorrect equation involving division and rounding", function() {
+			chai.assert.isFalse(isCorrect("7/2=3"))
+		})
+		it("Incorrect equation involving order of operations considerations", function() {
+			chai.assert.isFalse(isCorrect("4+6/2=5"))
+		})
+	})
+})
