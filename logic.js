@@ -24,7 +24,15 @@ function generatePossibilities(code, exclude, musthave) {
 		return []
 	}
 	
+	if (containsExclusions(code, exclude)) {
+		return []
+	}
+	
 	if (strCount(code, "?") == 0) {
+		if (isMissingMusthaves(code, musthave)) {
+			return []
+		}
+		
 		if (isCorrect(code)) {
 			return [code]
 		}
@@ -37,6 +45,7 @@ function generatePossibilities(code, exclude, musthave) {
 	
 	return []
 }
+
 
 /*	isValid returns false if the given code breaks mathematical format
 		"?"s are ignored and will never cause a code to become invalid
@@ -111,4 +120,25 @@ function isCorrect(code) {
 	catch (err) {
 		return false
 	}
+}
+
+/*	isMissingMusthaves returns true if the given code is missing items set as "Must have"
+	Prerequisites:
+		1. The equation should be complete, ie. Have no "?"s
+	Example use case:
+		isMissingMusthaves("1+1=2", "123") returns true because "3" is missing
+*/
+function isMissingMusthaves(code, musthave) {
+	// TODO: Implement function
+	return false
+}
+
+/*	containsExclusions returns true if the given code contains items marked for exclusion
+	It is guaranteed that "?"s will not cause a code to be flagged
+	Example use case:
+		containsExclusions("1+1=2", "2") returns true because "2" is present in the exclusion list
+*/
+function containsExclusions(code, exclude) {
+	// TODO: Implement function
+	return false
 }
