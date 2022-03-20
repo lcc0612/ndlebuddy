@@ -106,5 +106,17 @@ function redrawQueryDiv() {
 	CSS is also rotated for each state
 */
 function conditionSelectorButtonPressed() {
-	// TODO: Implement function
+	var value = this.getAttribute("buttonValue")
+	if (conditions[value] == "neutral") {
+		conditions[value] = "exclude"
+		this.setAttribute("class", "condition-selector-button condition-exclude")
+	}
+	else if (conditions[value] == "exclude") {
+		conditions[value] = "musthave"
+		this.setAttribute("class", "condition-selector-button condition-musthave")
+	}
+	else if (conditions[value] == "musthave") {
+		conditions[value] = "neutral"
+		this.setAttribute("class", "condition-selector-button")
+	}
 }

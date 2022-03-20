@@ -12,14 +12,15 @@ button {
 	padding: 1em 1em;
 	margin: 3px;
 	background-color: #EEE;
+	border: 1px solid #EEE;
 }
 
 button:hover {
-	background-color: #DDD;
+	border: 1px solid black;
 }
 
 button:active {
-	background-color: #BBB;
+	transform: scale(0.95);
 }
 
 .guess-lozenge {
@@ -52,6 +53,16 @@ button:active {
 
 .condition-selector-button {
 	font-size: 1.2em;
+}
+
+.condition-exclude {
+	background-color: black;
+	color: white;
+}
+
+.condition-musthave {
+	background-color: #A0A;
+	color: white;
 }
 
 
