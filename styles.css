@@ -1,5 +1,6 @@
 body {
-	max-width: 1080px;
+	font-size: 12px;
+	max-width: 65em;
 	margin: auto;
 	background-color: #CCC;
 	font-family: sans-serif;
@@ -65,9 +66,36 @@ button:active {
 	color: white;
 }
 
-
 #guessBtn {
 	width: 100%;
 	font-size: 1.5em;
 	background-color: #3C3;
+}
+
+table {
+	width: 100%;
+}
+
+td {
+	text-align: center;
+}
+
+.output-lozenge {
+	font-size: 1.2em;
+	min-width: 1em;
+	text-align: center;
+	display: inline-block;
+	margin: 0.1em;
+	border-radius: 3px;
+	background-color: #EEE;
+	padding: 0.2em;
+}
+
+.output-lozenge-fixed {
+	background-color: #DFD;
+}
+
+.output-lozenge-musthave {
+	background-color: #A0A;
+	color: white;
 }

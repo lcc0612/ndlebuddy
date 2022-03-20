@@ -61,7 +61,54 @@ function buildGUI() {
 	It retrieves all required information, calls the relevant functions from logic.js, and presents the answer
 */
 function guess() {
-	// TODO: Implement function
+	var excludes = []
+	var musthaves = []
+	
+	for (var c in conditions) {
+		if (conditions[c] == "exclude") {
+			excludes.push(c)
+		}
+		if (conditions[c] == "musthave") {
+			musthaves.push(c)
+		}
+	}
+	
+	var isFixed = []
+	for (var c of query) {
+		isFixed.push(c != "?")
+	}
+	
+	var answers = generatePossibilities(query, excludes, musthaves)
+	
+	var table = document.createElement("table")
+	for (var i=0; i<answers.length; i+=4) {
+		var row = document.createElement("tr")
+		for (var j=i; j<i+4 && j<answers.length; j+=1) {
+			var cell = document.createElement("td")
+			for (var k=0; k<answers[j].length; k+=1) {
+				var c = answers[j][k]
+				var charSpan = document.createElement("span")
+				charSpan.innerHTML = c
+				if (isFixed[k]) {
+					charSpan.setAttribute("class", "output-lozenge output-lozenge-fixed")
+				}
+				else {
+					if (musthaves.includes(c)) {
+						charSpan.setAttribute("class", "output-lozenge output-lozenge-musthave")
+					}
+					else {
+						charSpan.setAttribute("class", "output-lozenge")
+					}
+				}
+				cell.appendChild(charSpan)
+			}
+			row.appendChild(cell)
+		}
+		table.appendChild(row)
+	}
+	
+	resultDiv.innerHTML = ""
+	resultDiv.append(table)
 }
 
 
