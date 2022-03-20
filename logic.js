@@ -129,7 +129,11 @@ function isCorrect(code) {
 		isMissingMusthaves("1+1=2", "123") returns true because "3" is missing
 */
 function isMissingMusthaves(code, musthave) {
-	// TODO: Implement function
+	for (var m of musthave) {
+		if (!code.includes(m)) {
+			return true
+		}
+	}
 	return false
 }
 
@@ -139,6 +143,10 @@ function isMissingMusthaves(code, musthave) {
 		containsExclusions("1+1=2", "2") returns true because "2" is present in the exclusion list
 */
 function containsExclusions(code, exclude) {
-	// TODO: Implement function
+	for (var c of code) {
+		if (exclude.includes(c)) {
+			return true
+		}
+	}
 	return false
 }

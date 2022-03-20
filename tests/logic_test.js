@@ -111,3 +111,57 @@ describe("logic.js :: isCorrect() test", function() {
 		})
 	})
 })
+
+
+describe("logic.js :: isMissingMusthaves() test", function() {
+	describe("Typical cases", function() {
+		it("Not missing musthaves", function() {
+			chai.assert.isFalse(isMissingMusthaves("1+2=3", "123"))
+		})
+		it("Missing musthaves", function() {
+			chai.assert.isTrue(isMissingMusthaves("1+2=3", "124"))
+		})
+		it("Not missing including symbols", function() {
+			chai.assert.isFalse(isMissingMusthaves("1+2=3", "123+="))
+		})
+		it("Missing musthaves including symbols", function() {
+			chai.assert.isTrue(isMissingMusthaves("1+2=3", "123-="))
+		})
+	})
+	
+	describe("Unusual cases", function() {
+		it("Empty list of musthaves", function() {
+			chai.assert.isFalse(isMissingMusthaves("1*2*3", ""))
+		})
+		it("Empty equation", function() {
+			chai.assert.isFalse(isMissingMusthaves("", ""))
+		})
+	})
+})
+
+
+describe("logic.js :: containsExclusions() test", function() {
+	describe("Typical cases", function() {
+		it("Does not contain exclusions", function() {
+			chai.assert.isFalse(containsExclusions("1+2=3", "456"))
+		})
+		it("Contains exclusions", function() {
+			chai.assert.isTrue(containsExclusions("1+2=3", "145"))
+		})
+		it("No exclusions including symbols", function() {
+			chai.assert.isFalse(containsExclusions("1+2=3", "456-"))
+		})
+		it("Contains symbol exclusions", function() {
+			chai.assert.isTrue(containsExclusions("1+2=3", "+"))
+		})
+	})
+	
+	describe("Unusual cases", function() {
+		it("Empty list of exclusions", function() {
+			chai.assert.isFalse(containsExclusions("1*2*3", ""))
+		})
+		it("Empty equation", function() {
+			chai.assert.isFalse(containsExclusions("", ""))
+		})
+	})
+})
