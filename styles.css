@@ -1,7 +1,47 @@
-.query-control-button {
+body {
+	max-width: 1080px;
+	margin: auto;
 	
+	background-color: #CCC;
+	
+	font-family: sans-serif;
+	
+	box-sizing: border-box;
+}
+
+button {
+	border: 0px;
+	border-radius: 8px;
+	
+	padding: 1em 1em;
+	margin: 3px;
+}
+
+button:hover {
+	background-color: rgba(0,0,0,0.1);
+}
+
+#queryDiv {
+	font-size: 2em;
+	
+	border: 1px solid darkgray;
+}
+
+.query-control-button {
+	font-size: 1.5em;
+}
+
+.controls-div {
+	text-align: center;
 }
 
 .condition-selector-button {
-	
+	font-size: 1.2em;
+}
+
+
+#guessBtn {
+	width: 100%;
+	font-size: 1.5em;
+	background-color: #3C3;
 }
