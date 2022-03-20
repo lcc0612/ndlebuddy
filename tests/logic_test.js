@@ -75,6 +75,12 @@ describe("logic.js :: isValid() Test", function() {
 	})
 	
 	describe("Other", function() {
+		it("A single ? symbol is valid", function() {
+			chai.assert.isTrue(isValid("?"))
+		})
+		it("A single digit is valid", function() {
+			chai.assert.isTrue(isValid("2"))
+		})
 		it("The ? symbol should not make an otherwise valid code invalid", function() {
 			chai.assert.isTrue(isValid("?+?=???"))
 		});

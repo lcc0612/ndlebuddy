@@ -20,6 +20,9 @@ const OPERATORS = ["+","-","*","/","="]
 		returns ["0+8=8", "2+6=8", "3+5=8", "4+4=8", "5+3=8", "6+2=8", "8+0=8"]
 */
 function generatePossibilities(code, exclude, musthave) {
+	if (exclude == null) exclude = []
+	if (musthave == null) musthave = []
+	
 	if (!isValid(code)) {
 		return []
 	}
@@ -44,7 +47,7 @@ function generatePossibilities(code, exclude, musthave) {
 	var results = []
 	var substitutions = substituteFirstUnknown(code, exclude)
 	for (var possibleCode of substitutions) {
-		results.concat(generatePossibilities(possibleCode, exclude, musthave))
+		results = results.concat(generatePossibilities(possibleCode, exclude, musthave))
 	}
 	return results
 }
