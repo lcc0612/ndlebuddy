@@ -41,9 +41,12 @@ function generatePossibilities(code, exclude, musthave) {
 		}
 	}
 	
-	// TODO: Recursively generate possibilities
-	
-	return []
+	var results = []
+	var substitutions = substituteFirstUnknown(code, exclude)
+	for (var possibleCode of substitutions) {
+		results.concat(generatePossibilities(possibleCode, exclude, musthave))
+	}
+	return results
 }
 
 
@@ -149,4 +152,17 @@ function containsExclusions(code, exclude) {
 		}
 	}
 	return false
+}
+
+/*	substituteFirstUnknown generates a list of possible candidates for the first "?"
+	There is no guarantee that the answers returned are valid (per isValid) or mathematically correct (per isCorrect)
+	Prerequisites:
+		1. There should be at least one "?" in the code
+	Example use case:
+		substituteFirstUnknown("1+?=?", exclude="34567-")
+		returns ["1+1=?", "1+2=?", "1+8=?", "1+9=?", "1++=?", "1+*=?", "1+/=?"]
+*/
+function substituteFirstUnknown(code, exclude) {
+	// TODO: Implement function
+	return []
 }
