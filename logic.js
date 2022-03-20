@@ -77,7 +77,7 @@ function isValid(code) {
 	}
 	
 	// 4. Disallow certain operator pairings except where allowed by unary + and -
-	const DISALLOWED_PAIRINGS = ["+*", "+/", "+=", "-*", "-/", "-=", "*=", "/=", "=*", "=/"]
+	const DISALLOWED_PAIRINGS = ["+*", "+/", "+=", "-*", "-/", "-=", "*=", "/=", "=*", "=/", "**", "//"]
 	for (var pair of DISALLOWED_PAIRINGS) {
 		if (code.includes(pair)) {
 			return false
