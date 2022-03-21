@@ -47,7 +47,7 @@ function buildGUI() {
 		}
 	}
 	
-	for (var c of SYMBOLS.concat(["?"])) {
+	for (var c of SYMBOLS) {
 		var btn = document.createElement("button")
 		btn.innerHTML = c
 		btn.setAttribute("class", "condition-selector-button")
