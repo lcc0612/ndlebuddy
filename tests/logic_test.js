@@ -114,6 +114,9 @@ describe("logic.js :: isCorrect() test", function() {
 		it("Incorrect equation involving order of operations considerations", function() {
 			chai.assert.isFalse(isCorrect("4+6/2=5"))
 		})
+		it("Leading zeros should not be interpreted as octal", function() {
+			chai.assert.isFalse(isCorrect("033=27"))
+		})
 	})
 })
 
@@ -199,6 +202,35 @@ describe("logic.js :: substituteFirstUnknown() test", function() {
 		})
 		it("Multiple question marks, all excluded", function() {
 			chai.assert.isEmpty(substituteFirstUnknown("???", SYMBOLS))
+		})
+	})
+})
+
+describe("logic.js :: stripLeadingZeros() test", function() {
+	describe("Basic Tests", function() {
+		it("No zeros to strip - Output should be identical", function() {
+			chai.assert.equal(stripLeadingZeros("1+2=3"), "1+2=3")
+		})
+		it("No zeros to strip and no equals sign", function() {
+			chai.assert.equal(stripLeadingZeros("1+2"), "1+2")
+		})
+		it("Strip one zero", function() {
+			chai.assert.equal(stripLeadingZeros("09"), "9")
+		})
+		it("Strip multiple zeros", function() {
+			chai.assert.equal(stripLeadingZeros("00008"), "8")
+		})
+		it("Strip multiple zeros with ignoring trailing zeros", function() {
+			chai.assert.equal(stripLeadingZeros("00099900"), "99900")
+		})
+	})
+	
+	describe("Full Equations", function() {
+		it("Strip zeros everywhere", function() {
+			chai.assert.equal(stripLeadingZeros("03+07=010"), "3+7=10")
+		})
+		it("Strip excessive zeros everywhere", function() {
+			chai.assert.equal(stripLeadingZeros("00009*0000010=00000000090"), "9*10=90")
 		})
 	})
 })

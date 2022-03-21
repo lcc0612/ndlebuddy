@@ -16,7 +16,7 @@ describe("Integration :: generatePossibilities() Test", function() {
 			chai.assert.sameMembers(generatePossibilities("?+?=10", "234"), ['5+5=10', '1+9=10', '9+1=10'])
 		})
 		it("Add to ten, but exclusions imply addition", function() {
-			chai.assert.sameMembers(generatePossibilities("???=10", "234-*/"), ['5+5=10', '1+9=10', '9+1=10', '+10=10'])
+			chai.assert.sameMembers(generatePossibilities("???=10", "234-*/"), ['5+5=10', '1+9=10', '9+1=10', '+10=10', '010=10'])
 		})
 	})
 	

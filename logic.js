@@ -117,6 +117,7 @@ function isValid(code) {
 		isCorrect("4*5=2") returns false
 */
 function isCorrect(code) {
+	code = stripLeadingZeros(code)
 	var tokens = code.split("=")
 	try {
 		var lhs = eval(tokens[0])
@@ -126,6 +127,35 @@ function isCorrect(code) {
 	catch (err) {
 		return false
 	}
+}
+
+/*	stripLeadingZeros removes zeros from the front of each operand, to prevent JavaScript from interpreting the numbers as octal
+	The result of this function may not be the same length as its input
+	Prerequisites:
+		There are no "?"s in the code
+	Example use case:
+		stripLeadingZeros("003+007=010") returns "3+7=10"
+*/
+function stripLeadingZeros(code) {
+	var output = ""
+	var operators = ["+","-","*","/","="]
+	var acceptable = false
+	
+	for (var c of code) {
+		if (acceptable) {
+			output += c
+			
+			if (operators.includes(c)) {
+				acceptable = false
+			}
+		}
+		else if (!acceptable && !operators.includes(c) && c != 0) {
+			acceptable = true
+			output += c
+		}
+	}
+	
+	return output
 }
 
 /*	isMissingMusthaves returns true if the given code is missing items set as "Must have"
