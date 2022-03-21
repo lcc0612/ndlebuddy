@@ -150,8 +150,13 @@ function stripLeadingZeros(code) {
 				acceptable = false
 			}
 		}
-		else if (!acceptable && operators.includes(c) && prev == "0") {
-			output += "0" + c
+		else if (!acceptable && operators.includes(c)) {
+			if (prev == "0") {
+				output += "0" + c
+			}
+			else {
+				output += c
+			}
 		}
 		else if (!acceptable && !operators.includes(c) && c != 0) {
 			acceptable = true
