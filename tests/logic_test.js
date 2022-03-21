@@ -117,6 +117,9 @@ describe("logic.js :: isCorrect() test", function() {
 		it("Leading zeros should not be interpreted as octal", function() {
 			chai.assert.isFalse(isCorrect("033=27"))
 		})
+		it("Unaries should not give wrong answers", function() {
+			chai.assert.isFalse(isCorrect("0*+17=17"))
+		})
 	})
 })
 
@@ -213,6 +216,15 @@ describe("logic.js :: stripLeadingZeros() test", function() {
 		})
 		it("No zeros to strip and no equals sign", function() {
 			chai.assert.equal(stripLeadingZeros("1+2"), "1+2")
+		})
+		it("A single zero should not get stripped out", function() {
+			chai.assert.equal(stripLeadingZeros("0"), "0")
+		})
+		it("Single zeros should not get stripped out in an equation", function() {
+			chai.assert.equal(stripLeadingZeros("0*14=0"), "0*14=0")
+		})
+		it("If there are multiple zeros, keep only one", function() {
+			chai.assert.equal(stripLeadingZeros("000*1=00000"), "0*1=0")
 		})
 		it("Strip one zero", function() {
 			chai.assert.equal(stripLeadingZeros("09"), "9")

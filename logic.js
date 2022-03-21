@@ -140,6 +140,7 @@ function stripLeadingZeros(code) {
 	var output = ""
 	var operators = ["+","-","*","/","="]
 	var acceptable = false
+	var prev = ""
 	
 	for (var c of code) {
 		if (acceptable) {
@@ -149,10 +150,19 @@ function stripLeadingZeros(code) {
 				acceptable = false
 			}
 		}
+		else if (!acceptable && operators.includes(c) && prev == "0") {
+			output += "0" + c
+		}
 		else if (!acceptable && !operators.includes(c) && c != 0) {
 			acceptable = true
 			output += c
 		}
+		
+		prev = c
+	}
+	
+	if (!acceptable && prev == "0") {
+		output += "0"
 	}
 	
 	return output
