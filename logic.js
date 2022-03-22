@@ -40,6 +40,10 @@ function generatePossibilities(code, exclude, musthave) {
 		return []
 	}
 	
+	if (cannotAttainMusthaves(code, musthave)) {
+		return []
+	}
+	
 	if (strCount(code, "?") == 0) {
 		if (isMissingMusthaves(code, musthave)) {
 			return []
@@ -283,4 +287,14 @@ function shortcutSolve(code) {
 	}
 	
 	return tokens[0] + "=" + ans
+}
+
+/*	cannotAttainMusthaves checks if musthaves can be met, even if there are still unknowns
+	It does so by comparing the number of ?s to the number of musthaves that are yet to be met
+	Example use cases:
+		cannotAttainMusthaves("1??", "234") returns false, because there is no way to fulfil the presence of 2, 3 AND 4 in 2 spaces
+*/
+function cannotAttainMusthaves(code, musthave) {
+	// TODO: Implement function
+	return false
 }
