@@ -87,7 +87,6 @@ describe("logic.js :: isValid() Test", function() {
 	})
 })
 
-
 describe("logic.js :: isCorrect() test", function() {
 	describe("Correct Equations", function() {
 		it("Simple correct equation", function() {
@@ -123,7 +122,6 @@ describe("logic.js :: isCorrect() test", function() {
 	})
 })
 
-
 describe("logic.js :: isMissingMusthaves() test", function() {
 	describe("Typical cases", function() {
 		it("Not missing musthaves", function() {
@@ -149,7 +147,6 @@ describe("logic.js :: isMissingMusthaves() test", function() {
 		})
 	})
 })
-
 
 describe("logic.js :: containsExclusions() test", function() {
 	describe("Typical cases", function() {
@@ -217,6 +214,12 @@ describe("logic.js :: stripLeadingZeros() test", function() {
 		it("No zeros to strip and no equals sign", function() {
 			chai.assert.equal(stripLeadingZeros("1+2"), "1+2")
 		})
+		it("No equals sign", function() {
+			chai.assert.equal(stripLeadingZeros("1+01"), "1+1")
+		})
+		it("Only trailing zeros", function() {
+			chai.assert.equal(stripLeadingZeros("100000"), 100000)
+		})
 		it("Strip one zero", function() {
 			chai.assert.equal(stripLeadingZeros("09"), "9")
 		})
@@ -225,6 +228,9 @@ describe("logic.js :: stripLeadingZeros() test", function() {
 		})
 		it("Strip multiple zeros with ignoring trailing zeros", function() {
 			chai.assert.equal(stripLeadingZeros("00099900"), "99900")
+		})
+		it("Test with many signs", function() {
+			chai.assert.equal(stripLeadingZeros("01-02*03/04"), "1-2*3/4")
 		})
 	})
 	
