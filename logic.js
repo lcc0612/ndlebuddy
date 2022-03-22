@@ -263,6 +263,10 @@ function shortcutSolve(code) {
 		throw "The answer does not fit in the space given"
 	}
 	
+	if (ans.includes(".")) {
+		throw "The answer contains decimals"
+	}
+	
 	while (ans.length < tokens[1].length) {
 		ans = "0" + ans
 	}

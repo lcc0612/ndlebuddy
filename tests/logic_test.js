@@ -274,6 +274,18 @@ describe("logic.js :: shortcutSolve() test", function() {
 			chai.assert.throws(function() {shortcutSolve("abc=?")})
 		})
 	})
+	
+	describe("Edge Cases", function() {
+		it("Decimal results are handled properly without enough space", function() {
+			chai.assert.throws(function() {shortcutSolve("5/2=?")})
+		})
+		it("Decimal results are still handled properly even with enough space", function() {
+			chai.assert.throws(function() {shortcutSolve("5/2=???")})
+		})
+		it("Divisions are still fine despite rounding", function() {
+			chai.assert.equal(shortcutSolve("4/2=?"), "4/2=2")
+		})
+	})
 })
 
 describe("logic.js :: cannotAttainMusthaves() test", function() {
