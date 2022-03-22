@@ -301,3 +301,41 @@ describe("logic.js :: shortcutSolve() test", function() {
 		})
 	})
 })
+
+describe("logic.js :: cannotAttainMusthaves() test", function() {
+	describe("Simple Test", function() {
+		it("No musthaves and no question marks", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1",""))
+		})
+		it("No musthaves and one question mark", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("?",""))
+		})
+		it("One musthave already met, no question marks", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1","1"))
+		})
+		it("One question mark only", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("?","1"))
+		})
+		it("One musthave that cannot be met, no question marks", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("1","2"))
+		})
+	})
+	
+	describe("Longer Tests", function() {
+		it("Just enough question marks", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("???","123"))
+		})
+		it("Too many question marks", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("?????","123"))
+		})
+		it("Not enough question marks", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("??","123"))
+		})
+		it("Not enough question marks, but constants partially fulfil", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("??1","123"))
+		})
+		it("Not enough question marks, and constants do not help", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("??5","123"))
+		})
+	})
+})

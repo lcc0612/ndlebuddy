@@ -295,6 +295,16 @@ function shortcutSolve(code) {
 		cannotAttainMusthaves("1??", "234") returns false, because there is no way to fulfil the presence of 2, 3 AND 4 in 2 spaces
 */
 function cannotAttainMusthaves(code, musthave) {
-	// TODO: Implement function
-	return false
+	if (musthave == null || musthave == "") {
+		return false
+	}
+	
+	var numQnMarks = strCount(code, "?")
+	var numMusthavesUnmet = musthave.length
+	for (var c of musthave) {
+		if (code.includes(c)) {
+			numMusthavesUnmet -= 1
+		}
+	}
+	return numQnMarks < numMusthavesUnmet 
 }
