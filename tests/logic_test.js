@@ -252,3 +252,46 @@ describe("logic.js :: stripLeadingZeros() test", function() {
 		})
 	})
 })
+
+describe("logic.js :: validForShortcutSolve() test", function() {
+	describe("Valid Cases", function() {
+		it("Simple", function() {
+			chai.assert.isTrue(validForShortcutSolve("2+3=?"))
+		})
+	})
+	
+	describe("Invalid Cases", function() {
+		it("Breaks rule 1 - Multiple equals signs", function() {
+			chai.assert.isFalse(validForShortcutSolve("2+3==?"))
+		})
+		it("Breaks rule 1 - No equals signs", function() {
+			chai.assert.isFalse(validForShortcutSolve("2+3"))
+		})
+		it("Breaks rule 2 - There are ? signs on the left", function() {
+			chai.assert.isFalse(validForShortcutSolve("2+?=?"))
+		})
+		it("Breaks rule 3 - There are non ? signs on the right", function() {
+			chai.assert.isFalse(validForShortcutSolve("5*5=2?"))
+		})
+		it("Breaks rules 2 & 3", function() {
+			chai.assert.isFalse(validForShortcutSolve("2*5+?=1?"))
+		})
+	})
+})
+
+describe("logic.js :: shortcutSolve() test", function() {
+	describe("Simple Tests", function() {
+		it("Basic valid answer", function() {
+			chai.assert.equal(shortcutSolve("1+1=?"), "1+1=2")
+		})
+	})
+	
+	describe("Failure Cases", function() {
+		it("Answer too long for right-hand-side", function() {
+			chai.assert.throws(function() {shortcutSolve("5*8=?")})
+		})
+		it("Equation on left doesn't compute", function() {
+			chai.assert.throws(function() {shortcutSolve("abc=?")})
+		})
+	})
+})

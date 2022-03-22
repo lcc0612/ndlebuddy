@@ -15,6 +15,7 @@
     <script class="mocha-init">
       mocha.setup('bdd');
       mocha.checkLeaks();
+	  mocha.timeout(5000);
     </script>
     
 	<script src="util.js"></script>

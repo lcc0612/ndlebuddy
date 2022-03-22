@@ -27,12 +27,17 @@ function generatePossibilities(code, exclude, musthave) {
 		return []
 	}
 	
-	if (containsExclusions(code, exclude)) {
-		return []
+	if (validForShortcutSolve(code)) {
+		try {
+			code = shortcutSolve(code)
+		}
+		catch (err) {
+			// do nothing
+		}
 	}
 	
-	if (canShortcutSolve(code)) {
-		code = shortcutSolve(code)
+	if (containsExclusions(code, exclude)) {
+		return []
 	}
 	
 	if (strCount(code, "?") == 0) {
@@ -234,23 +239,48 @@ function substituteFirstUnknown(code, exclude) {
 	return results
 }
 
-/*	canShortcutSolve returns true if all of the following conditions are met:
-		1. There is an equals sign
+/*	validForShortcutSolve returns true if all of the following conditions are met:
+		1. There is exactly one equals sign
 		2. On the left of the equals sign is a complete equation without any "?"
 		3. There are only "?"s on the right side of the equals sign
+		Note that validity does not imply the answer returned will be correct
 	Example use case:
-		canShortcutSolve("1+2=?") returns true
+		validForShortcutSolve("1+2=?") returns true
 */
-function canShortcutSolve(code) {
-	// TODO: Implement this function
-	return false
+function validForShortcutSolve(code) {
+	if (strCount(code, "=") != 1) {
+		return false
+	}
+	
+	var tokens = code.split("=")
+	if (tokens[0].includes("?")) {
+		return false
+	}
+	
+	if (strCount(tokens[1],"?") != tokens[1].length) {
+		return false
+	}
+	
+	return true
 }
 
-/*	shortcutSolve looks for an equation that can be shortcut-solved, per canShortcutSolve, and replaces the "?" with the mathematically correct answer
+/*	shortcutSolve looks for an equation that can be shortcut-solved, per validForShortcutSolve, and replaces the "?" with the mathematically correct answer
+	It may throw exception if the left-hand-side fails to evaluate, or if it encounters an "unsolvable" situation
 	Example use case:
 		shortcutSolve("8*6=??") returns "8*6=48"
+		shortcutSolve("9*9=?") throws an exception (since the answer 81 cannot fit in the one digit space given)
 */
 function shortcutSolve(code) {
-	// TODO: Implement this function
-	return ""
+	var tokens = code.split("=")
+	var ans = eval(tokens[0]).toString()
+	
+	if (ans.length > tokens[1].length) {
+		throw "The answer does not fit in the space given"
+	}
+	
+	while (ans.length < tokens[1].length) {
+		ans = "0" + ans
+	}
+	
+	return tokens[0] + "=" + ans
 }
