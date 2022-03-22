@@ -45,10 +45,6 @@ function generatePossibilities(code, exclude, musthave) {
 	}
 	
 	if (strCount(code, "?") == 0) {
-		if (isMissingMusthaves(code, musthave)) {
-			return []
-		}
-		
 		if (isCorrect(code)) {
 			return [code]
 		}
@@ -184,21 +180,6 @@ function stripLeadingZeros(code) {
 	}
 	
 	return output
-}
-
-/*	isMissingMusthaves returns true if the given code is missing items set as "Must have"
-	Prerequisites:
-		1. The equation should be complete, ie. Have no "?"s
-	Example use case:
-		isMissingMusthaves("1+1=2", "123") returns true because "3" is missing
-*/
-function isMissingMusthaves(code, musthave) {
-	for (var m of musthave) {
-		if (!code.includes(m)) {
-			return true
-		}
-	}
-	return false
 }
 
 /*	containsExclusions returns true if the given code contains items marked for exclusion

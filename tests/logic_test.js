@@ -122,32 +122,6 @@ describe("logic.js :: isCorrect() test", function() {
 	})
 })
 
-describe("logic.js :: isMissingMusthaves() test", function() {
-	describe("Typical cases", function() {
-		it("Not missing musthaves", function() {
-			chai.assert.isFalse(isMissingMusthaves("1+2=3", "123"))
-		})
-		it("Missing musthaves", function() {
-			chai.assert.isTrue(isMissingMusthaves("1+2=3", "124"))
-		})
-		it("Not missing including symbols", function() {
-			chai.assert.isFalse(isMissingMusthaves("1+2=3", "123+="))
-		})
-		it("Missing musthaves including symbols", function() {
-			chai.assert.isTrue(isMissingMusthaves("1+2=3", "123-="))
-		})
-	})
-	
-	describe("Unusual cases", function() {
-		it("Empty list of musthaves", function() {
-			chai.assert.isFalse(isMissingMusthaves("1*2*3", ""))
-		})
-		it("Empty equation", function() {
-			chai.assert.isFalse(isMissingMusthaves("", ""))
-		})
-	})
-})
-
 describe("logic.js :: containsExclusions() test", function() {
 	describe("Typical cases", function() {
 		it("Does not contain exclusions", function() {
@@ -303,6 +277,27 @@ describe("logic.js :: shortcutSolve() test", function() {
 })
 
 describe("logic.js :: cannotAttainMusthaves() test", function() {
+	describe("No lookahead necessary", function() {
+		it("Not missing musthaves", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1+2=3", "123"))
+		})
+		it("Missing musthaves", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("1+2=3", "124"))
+		})
+		it("Not missing including symbols", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1+2=3", "123+="))
+		})
+		it("Missing musthaves including symbols", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("1+2=3", "123-="))
+		})
+		it("Empty list of musthaves", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1*2*3", ""))
+		})
+		it("Empty equation", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("", ""))
+		})
+	})
+	
 	describe("Simple Test", function() {
 		it("No musthaves and no question marks", function() {
 			chai.assert.isFalse(cannotAttainMusthaves("1",""))
