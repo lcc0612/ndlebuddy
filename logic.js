@@ -31,6 +31,10 @@ function generatePossibilities(code, exclude, musthave) {
 		return []
 	}
 	
+	if (canShortcutSolve(code)) {
+		code = shortcutSolve(code)
+	}
+	
 	if (strCount(code, "?") == 0) {
 		if (isMissingMusthaves(code, musthave)) {
 			return []
@@ -228,4 +232,25 @@ function substituteFirstUnknown(code, exclude) {
 	}
 	
 	return results
+}
+
+/*	canShortcutSolve returns true if all of the following conditions are met:
+		1. There is an equals sign
+		2. On the left of the equals sign is a complete equation without any "?"
+		3. There are only "?"s on the right side of the equals sign
+	Example use case:
+		canShortcutSolve("1+2=?") returns true
+*/
+function canShortcutSolve(code) {
+	// TODO: Implement this function
+	return false
+}
+
+/*	shortcutSolve looks for an equation that can be shortcut-solved, per canShortcutSolve, and replaces the "?" with the mathematically correct answer
+	Example use case:
+		shortcutSolve("8*6=??") returns "8*6=48"
+*/
+function shortcutSolve(code) {
+	// TODO: Implement this function
+	return ""
 }
