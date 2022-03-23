@@ -76,7 +76,11 @@ function generatePossibilitiesRecur(code, exclude, musthave) {
 /*	hasIllegalCharacters() checks if the code contains symbols not recognized by the program
 */
 function hasIllegalCharacters(code) {
-	// TODO: Implement program
+	for (var c of code) {
+		if (!SYMBOLS.includes(c) && c != "?") {
+			return true
+		}
+	}
 	return false
 }
 
@@ -87,12 +91,7 @@ function hasIllegalCharacters(code) {
 		isValid("3??=2=2") returns false due to there being 2 equals signs
 */
 function isValid(code) {
-	// 1. Only the symbols in SYMBOLS, plus "?" are allowed
-	for (var c of code) {
-		if (!SYMBOLS.includes(c) && c != "?") {
-			return false
-		}
-	}
+	// Rule 1 has now been extracted into hasIllegalCharacters(), but the numbering will remain
 	
 	// 2. The last character cannot be an operator
 	if (OPERATORS.includes(code[code.length - 1])) {

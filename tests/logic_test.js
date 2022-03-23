@@ -1,22 +1,27 @@
-describe("logic.js :: isValid() Test", function() {
-	describe("Rule 1 - Only allowed symbols should appear", function() {
+describe("logic.js :: hasIllegalCharacters() Test", function() {
+	describe("Valid tests", function() {
 		it("Statement with only allowed symbols", function() {
-			chai.assert.isTrue(isValid("1+2+3+4"))
+			chai.assert.isFalse(hasIllegalCharacters("1+2+3+4"))
 		})
 		it("Statement with question marks", function() {
-			chai.assert.isTrue(isValid("1+2??+4"))
+			chai.assert.isFalse(hasIllegalCharacters("1+2??+4"))
 		})
 		it("Statement with equals sign", function() {
-			chai.assert.isTrue(isValid("1+2??=99"))
-		})
-		it("Statement with one invalid character", function() {
-			chai.assert.isFalse(isValid("1+2!?=99"))
-		})
-		it("Statement with multiple invalid characters", function() {
-			chai.assert.isFalse(isValid("3#$$))+2!?=99"))
+			chai.assert.isFalse(hasIllegalCharacters("1+2??=99"))
 		})
 	})
 	
+	describe("Invalid tests", function() {
+		it("Statement with one invalid character", function() {
+			chai.assert.isTrue(hasIllegalCharacters("1+2!?=99"))
+		})
+		it("Statement with multiple invalid characters", function() {
+			chai.assert.isTrue(hasIllegalCharacters("3#$$))+2!?=99"))
+		})
+	})	
+})
+
+describe("logic.js :: isValid() Test", function() {
 	describe("Rule 2 - Last character must not be an operator", function() {
 		it ("Last character is equals", function() {
 			chai.assert.isFalse(isValid("123="))
