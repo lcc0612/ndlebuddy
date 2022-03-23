@@ -14,12 +14,24 @@ const OPERATORS = ["+","-","*","/","="]
 		musthave - A string representing all symbols that MUST appear in the result
 		
 		Note that all parameter values must be legal values in the game, as defined in the SYMBOLS list above
+		This function is merely a wrapper about generatePossibilitiesRecur(), to address problems that only crop up once
 		
 	Example use case:
 		generatePossibilities("?+?=8", exclude="7", musthave="")
 		returns ["0+8=8", "2+6=8", "3+5=8", "4+4=8", "5+3=8", "6+2=8", "8+0=8"]
 */
 function generatePossibilities(code, exclude, musthave) {
+	if (hasIllegalCharacters(code)) {
+		throw "There are unacceptable characters in the code!"
+	}
+	
+	return generatePossibilitiesRecur(code, exclude, musthave)
+}
+
+/*	generatePossibilitiesRecur is the heavy-lifting recursive function that drives the program
+	For specifications, refer to generatePossibilities() above
+*/
+function generatePossibilitiesRecur(code, exclude, musthave) {
 	if (exclude == null) exclude = []
 	if (musthave == null) musthave = []
 	
@@ -56,9 +68,16 @@ function generatePossibilities(code, exclude, musthave) {
 	var results = []
 	var substitutions = substituteFirstUnknown(code, exclude)
 	for (var possibleCode of substitutions) {
-		results = results.concat(generatePossibilities(possibleCode, exclude, musthave))
+		results = results.concat(generatePossibilitiesRecur(possibleCode, exclude, musthave))
 	}
 	return results
+}
+
+/*	hasIllegalCharacters() checks if the code contains symbols not recognized by the program
+*/
+function hasIllegalCharacters(code) {
+	// TODO: Implement program
+	return false
 }
 
 
