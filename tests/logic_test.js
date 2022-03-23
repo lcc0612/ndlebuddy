@@ -243,6 +243,9 @@ describe("logic.js :: validForShortcutSolve() test", function() {
 		it("Simple", function() {
 			chai.assert.isTrue(validForShortcutSolve("2+3=?"))
 		})
+		it("Non ? signs are now accepted on the right", function() {
+			chai.assert.isTrue(validForShortcutSolve("8*3=?4"))
+		})
 	})
 	
 	describe("Invalid Cases", function() {
@@ -255,9 +258,6 @@ describe("logic.js :: validForShortcutSolve() test", function() {
 		it("Breaks rule 2 - There are ? signs on the left", function() {
 			chai.assert.isFalse(validForShortcutSolve("2+?=?"))
 		})
-		it("Breaks rule 3 - There are non ? signs on the right", function() {
-			chai.assert.isFalse(validForShortcutSolve("5*5=2?"))
-		})
 		it("Breaks rules 2 & 3", function() {
 			chai.assert.isFalse(validForShortcutSolve("2*5+?=1?"))
 		})
@@ -265,9 +265,12 @@ describe("logic.js :: validForShortcutSolve() test", function() {
 })
 
 describe("logic.js :: shortcutSolve() test", function() {
-	describe("Simple Tests", function() {
+	describe("Valid Tests", function() {
 		it("Basic valid answer", function() {
 			chai.assert.equal(shortcutSolve("1+1=?"), "1+1=2")
+		})
+		it("Valid answer with right-side partially filled in", function() {
+			chai.assert.equal(shortcutSolve("8*3=?4"), "8*3=24")
 		})
 	})
 	
@@ -277,6 +280,9 @@ describe("logic.js :: shortcutSolve() test", function() {
 		})
 		it("Equation on left doesn't compute", function() {
 			chai.assert.throws(function() {shortcutSolve("abc=?")})
+		})
+		it("Invalid answer because the right-side doesn't match the answer", function() {
+			chai.assert.throws(function() {shortcutSolve("8*3=?0")})
 		})
 	})
 	

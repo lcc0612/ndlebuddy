@@ -245,7 +245,7 @@ function substituteFirstUnknown(code, exclude) {
 /*	validForShortcutSolve returns true if all of the following conditions are met:
 		1. There is exactly one equals sign
 		2. On the left of the equals sign is a complete equation without any "?"
-		3. There are only "?"s on the right side of the equals sign
+		3. There is at least one "?" on the right side of the equals sign
 		Note that validity does not imply the answer returned will be correct
 	Example use case:
 		validForShortcutSolve("1+2=?") returns true
@@ -260,7 +260,7 @@ function validForShortcutSolve(code) {
 		return false
 	}
 	
-	if (strCount(tokens[1],"?") != tokens[1].length) {
+	if (!tokens[1].includes("?")) {
 		return false
 	}
 	
@@ -287,6 +287,12 @@ function shortcutSolve(code) {
 	
 	while (ans.length < tokens[1].length) {
 		ans = "0" + ans
+	}
+	
+	for (var i=0; i<ans.length; i++) {
+		if (tokens[1][i] != "?" && tokens[1][i] != ans[i]) {
+			throw "Shortcut solve produces an answer that does not fit the blanks"
+		}
 	}
 	
 	return tokens[0] + "=" + ans
