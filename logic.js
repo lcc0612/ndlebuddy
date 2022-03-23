@@ -32,7 +32,7 @@ function generatePossibilities(code, exclude, musthave) {
 			code = shortcutSolve(code)
 		}
 		catch (err) {
-			// do nothing
+			return []
 		}
 	}
 	
