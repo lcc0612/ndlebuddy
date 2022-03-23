@@ -103,13 +103,8 @@ function isValid(code) {
 		return false
 	}
 	
+	// Rule 4 below is no longer enforced, and is instead avoided by substituteFirstUnknown()
 	// 4. Disallow certain operator pairings except where allowed by unary + and -
-	const DISALLOWED_PAIRINGS = ["+*", "+/", "+=", "-*", "-/", "-=", "*=", "/=", "=*", "=/", "**", "//"]
-	for (var pair of DISALLOWED_PAIRINGS) {
-		if (code.includes(pair)) {
-			return false
-		}
-	}
 	
 	// 5. Only 0 or 1 equals sign(s) allowed
 	var equalsSignCount = strCount(code, "=")
@@ -230,13 +225,28 @@ function substituteFirstUnknown(code, exclude) {
 		return []
 	}
 	
+	var prev
+	var next
+	if (qnMarkIdx > 0) {
+		prev = code[qnMarkIdx - 1]
+	}
+	if (qnMarkIdx < code.length - 1) {
+		next = code[qnMarkIdx + 1]
+	}
+	
+	if (OPERATORS.includes(prev) || OPERATORS.includes(next)) {
+		exclude = exclude.concat(["*","/","="])
+	}
+	
 	var left = code.substring(0,qnMarkIdx)
 	var right = code.substring(qnMarkIdx+1)
 	
-	for (var c of SYMBOLS) {
-		if (!exclude.includes(c)) {
-			results.push(left + c + right)
-		}
+	var symbolsToExplore = SYMBOLS.filter(function(value, index, arr) {
+		return !exclude.includes(value)
+	})
+	
+	for (var c of symbolsToExplore) {
+		results.push(left + c + right)
 	}
 	
 	return results

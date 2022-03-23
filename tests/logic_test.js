@@ -46,15 +46,6 @@ describe("logic.js :: isValid() Test", function() {
 		})
 	})
 	
-	describe("Rule 4 - Disallow operator pairings outside of what is provided by unary operators", function() {
-		it ("Contains several", function() {
-			chai.assert.isFalse(isValid("2+/5-=3"))
-		})
-		it ("Contains only one pairing allowed by unary operators", function() {
-			chai.assert.isTrue(isValid("-3+5=2"))
-		})
-	})
-	
 	describe("Rule 5 - Only zero or one equals sign(s) allowed", function() {
 		it ("No equals signs", function() {
 			chai.assert.isTrue(isValid("2+5"))
