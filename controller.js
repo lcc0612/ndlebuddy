@@ -42,7 +42,7 @@ function buildGUI() {
 		btn.onclick = queryControlButtonPressed
 		queryControlsDiv.appendChild(btn)
 		
-		if (c == "9") {
+		if (c == "0") {
 			queryControlsDiv.appendChild(document.createElement("br"))
 		}
 	}

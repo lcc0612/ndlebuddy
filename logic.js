@@ -3,7 +3,7 @@
 	Should only work with strings and lists and have no coupling with the UI or controller
 */
 
-const SYMBOLS = ["0","1","2","3","4","5","6","7","8","9","+","-","*","/","="]
+const SYMBOLS = ["1","2","3","4","5","6","7","8","9","0","+","-","*","/","="]
 const OPERATORS = ["+","-","*","/","="]
 
 /*	generatePossibilities returns a list of all possible solutions for any given puzzle state
