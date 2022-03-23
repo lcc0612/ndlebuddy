@@ -15,6 +15,6 @@
 		https://stackoverflow.com/questions/881085/count-the-number-of-occurrences-of-a-character-in-a-string-in-javascript/50592629#50592629
 */
 function strCount(haystack, needle) {
-	if (needle == "") return 0;
+	if (!haystack.includes(needle)) return 0;
 	return haystack.split(needle).length - 1;
 }

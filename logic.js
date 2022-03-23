@@ -44,7 +44,7 @@ function generatePossibilities(code, exclude, musthave) {
 		return []
 	}
 	
-	if (strCount(code, "?") == 0) {
+	if (!code.includes("?")) {
 		if (isCorrect(code)) {
 			return [code]
 		}
