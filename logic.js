@@ -299,9 +299,11 @@ function shortcutSolve(code) {
 		ans = "0" + ans
 	}
 	
-	for (var i=0; i<ans.length; i++) {
-		if (tokens[1][i] != "?" && tokens[1][i] != ans[i]) {
-			throw "Shortcut solve produces an answer that does not fit the blanks"
+	if (strCount(tokens[1], "?") < tokens[1].length) {
+		for (var i=0; i<ans.length; i++) {
+			if (tokens[1][i] != "?" && tokens[1][i] != ans[i]) {
+				throw "Shortcut solve produces an answer that does not fit the blanks"
+			}
 		}
 	}
 	
