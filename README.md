@@ -17,3 +17,24 @@ You may also want to set some conditions under the **Select Conditions** heading
 ## Unit Tests
 
 Run ```tests.html``` in your browser to perform unit testing. This file fetches resources, namely [The Chai Assertion Library](https://www.chaijs.com/) and [Mocha](https://mochajs.org/) to facilitate unit testing.
+
+
+## Version History
+
+### Release Candidate 2
+* Some optimizations added, up to 5 unknowns can be done in a reasonable amount of time on a modern system
+
+### Release Candidate 1
+* Search for possible answers given a partially-known equation
+* Specify "excludes" and "musthaves"
+* Program may not be optimized, searches with more than 4 unknowns are not recommended
+
+
+## Future Work
+
+* Priority System
+  * Implement some way of discerning between whether certain outputs are good or bad, and present them in the order of most viable first
+* Positioned Exclusions
+  * Implement some mechanism to ignore eliminated possibilities for each digit
+* Processing Complexity Estimation
+  * To guide users as to how much time an operation might take to prevent browser lockups
