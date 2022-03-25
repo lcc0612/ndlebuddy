@@ -1,22 +1,27 @@
-describe("logic.js :: isValid() Test", function() {
-	describe("Rule 1 - Only allowed symbols should appear", function() {
+describe("logic.js :: hasIllegalCharacters() Test", function() {
+	describe("Valid tests", function() {
 		it("Statement with only allowed symbols", function() {
-			chai.assert.isTrue(isValid("1+2+3+4"))
+			chai.assert.isFalse(hasIllegalCharacters("1+2+3+4"))
 		})
 		it("Statement with question marks", function() {
-			chai.assert.isTrue(isValid("1+2??+4"))
+			chai.assert.isFalse(hasIllegalCharacters("1+2??+4"))
 		})
 		it("Statement with equals sign", function() {
-			chai.assert.isTrue(isValid("1+2??=99"))
-		})
-		it("Statement with one invalid character", function() {
-			chai.assert.isFalse(isValid("1+2!?=99"))
-		})
-		it("Statement with multiple invalid characters", function() {
-			chai.assert.isFalse(isValid("3#$$))+2!?=99"))
+			chai.assert.isFalse(hasIllegalCharacters("1+2??=99"))
 		})
 	})
 	
+	describe("Invalid tests", function() {
+		it("Statement with one invalid character", function() {
+			chai.assert.isTrue(hasIllegalCharacters("1+2!?=99"))
+		})
+		it("Statement with multiple invalid characters", function() {
+			chai.assert.isTrue(hasIllegalCharacters("3#$$))+2!?=99"))
+		})
+	})	
+})
+
+describe("logic.js :: isValid() Test", function() {
 	describe("Rule 2 - Last character must not be an operator", function() {
 		it ("Last character is equals", function() {
 			chai.assert.isFalse(isValid("123="))
@@ -38,15 +43,6 @@ describe("logic.js :: isValid() Test", function() {
 		})
 		it ("First character is asterisk", function() {
 			chai.assert.isFalse(isValid("*5=3"))
-		})
-	})
-	
-	describe("Rule 4 - Disallow operator pairings outside of what is provided by unary operators", function() {
-		it ("Contains several", function() {
-			chai.assert.isFalse(isValid("2+/5-=3"))
-		})
-		it ("Contains only one pairing allowed by unary operators", function() {
-			chai.assert.isTrue(isValid("-3+5=2"))
 		})
 	})
 	
@@ -87,7 +83,6 @@ describe("logic.js :: isValid() Test", function() {
 	})
 })
 
-
 describe("logic.js :: isCorrect() test", function() {
 	describe("Correct Equations", function() {
 		it("Simple correct equation", function() {
@@ -122,34 +117,6 @@ describe("logic.js :: isCorrect() test", function() {
 		})
 	})
 })
-
-
-describe("logic.js :: isMissingMusthaves() test", function() {
-	describe("Typical cases", function() {
-		it("Not missing musthaves", function() {
-			chai.assert.isFalse(isMissingMusthaves("1+2=3", "123"))
-		})
-		it("Missing musthaves", function() {
-			chai.assert.isTrue(isMissingMusthaves("1+2=3", "124"))
-		})
-		it("Not missing including symbols", function() {
-			chai.assert.isFalse(isMissingMusthaves("1+2=3", "123+="))
-		})
-		it("Missing musthaves including symbols", function() {
-			chai.assert.isTrue(isMissingMusthaves("1+2=3", "123-="))
-		})
-	})
-	
-	describe("Unusual cases", function() {
-		it("Empty list of musthaves", function() {
-			chai.assert.isFalse(isMissingMusthaves("1*2*3", ""))
-		})
-		it("Empty equation", function() {
-			chai.assert.isFalse(isMissingMusthaves("", ""))
-		})
-	})
-})
-
 
 describe("logic.js :: containsExclusions() test", function() {
 	describe("Typical cases", function() {
@@ -217,6 +184,12 @@ describe("logic.js :: stripLeadingZeros() test", function() {
 		it("No zeros to strip and no equals sign", function() {
 			chai.assert.equal(stripLeadingZeros("1+2"), "1+2")
 		})
+		it("No equals sign", function() {
+			chai.assert.equal(stripLeadingZeros("1+01"), "1+1")
+		})
+		it("Only trailing zeros", function() {
+			chai.assert.equal(stripLeadingZeros("100000"), 100000)
+		})
 		it("Strip one zero", function() {
 			chai.assert.equal(stripLeadingZeros("09"), "9")
 		})
@@ -225,6 +198,9 @@ describe("logic.js :: stripLeadingZeros() test", function() {
 		})
 		it("Strip multiple zeros with ignoring trailing zeros", function() {
 			chai.assert.equal(stripLeadingZeros("00099900"), "99900")
+		})
+		it("Test with many signs", function() {
+			chai.assert.equal(stripLeadingZeros("01-02*03/04"), "1-2*3/4")
 		})
 	})
 	
@@ -249,6 +225,126 @@ describe("logic.js :: stripLeadingZeros() test", function() {
 		})
 		it("Unary / Paired up operators should not get stripped out", function() {
 			chai.assert.equal(stripLeadingZeros("03+04=-7"), "3+4=-7")
+		})
+	})
+})
+
+describe("logic.js :: validForShortcutSolve() test", function() {
+	describe("Valid Cases", function() {
+		it("Simple", function() {
+			chai.assert.isTrue(validForShortcutSolve("2+3=?"))
+		})
+		it("Non ? signs are now accepted on the right", function() {
+			chai.assert.isTrue(validForShortcutSolve("8*3=?4"))
+		})
+	})
+	
+	describe("Invalid Cases", function() {
+		it("Breaks rule 1 - Multiple equals signs", function() {
+			chai.assert.isFalse(validForShortcutSolve("2+3==?"))
+		})
+		it("Breaks rule 1 - No equals signs", function() {
+			chai.assert.isFalse(validForShortcutSolve("2+3"))
+		})
+		it("Breaks rule 2 - There are ? signs on the left", function() {
+			chai.assert.isFalse(validForShortcutSolve("2+?=?"))
+		})
+		it("Breaks rules 2 & 3", function() {
+			chai.assert.isFalse(validForShortcutSolve("2*5+?=1?"))
+		})
+	})
+})
+
+describe("logic.js :: shortcutSolve() test", function() {
+	describe("Valid Tests", function() {
+		it("Basic valid answer", function() {
+			chai.assert.equal(shortcutSolve("1+1=?"), "1+1=2")
+		})
+		it("Valid answer with right-side partially filled in", function() {
+			chai.assert.equal(shortcutSolve("8*3=?4"), "8*3=24")
+		})
+	})
+	
+	describe("Failure Cases", function() {
+		it("Answer too long for right-hand-side", function() {
+			chai.assert.throws(function() {shortcutSolve("5*8=?")})
+		})
+		it("Equation on left doesn't compute", function() {
+			chai.assert.throws(function() {shortcutSolve("abc=?")})
+		})
+		it("Invalid answer because the right-side doesn't match the answer", function() {
+			chai.assert.throws(function() {shortcutSolve("8*3=?0")})
+		})
+	})
+	
+	describe("Edge Cases", function() {
+		it("Decimal results are handled properly without enough space", function() {
+			chai.assert.throws(function() {shortcutSolve("5/2=?")})
+		})
+		it("Decimal results are still handled properly even with enough space", function() {
+			chai.assert.throws(function() {shortcutSolve("5/2=???")})
+		})
+		it("Divisions are still fine despite rounding", function() {
+			chai.assert.equal(shortcutSolve("4/2=?"), "4/2=2")
+		})
+	})
+})
+
+describe("logic.js :: cannotAttainMusthaves() test", function() {
+	describe("No lookahead necessary", function() {
+		it("Not missing musthaves", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1+2=3", "123"))
+		})
+		it("Missing musthaves", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("1+2=3", "124"))
+		})
+		it("Not missing including symbols", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1+2=3", "123+="))
+		})
+		it("Missing musthaves including symbols", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("1+2=3", "123-="))
+		})
+		it("Empty list of musthaves", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1*2*3", ""))
+		})
+		it("Empty equation", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("", ""))
+		})
+	})
+	
+	describe("Simple Test", function() {
+		it("No musthaves and no question marks", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1",""))
+		})
+		it("No musthaves and one question mark", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("?",""))
+		})
+		it("One musthave already met, no question marks", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("1","1"))
+		})
+		it("One question mark only", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("?","1"))
+		})
+		it("One musthave that cannot be met, no question marks", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("1","2"))
+		})
+	})
+	
+	describe("Longer Tests", function() {
+		it("Just enough question marks", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("???","123"))
+		})
+		it("Too many question marks", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("?????","123"))
+		})
+		it("Not enough question marks", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("??","123"))
+		})
+		it("Not enough question marks, but constants partially fulfil", function() {
+			chai.assert.isFalse(cannotAttainMusthaves("??1","123"))
+		})
+		it("Not enough question marks, and constants do not help", function() {
+			chai.assert.isTrue(cannotAttainMusthaves("??5","123"))
 		})
 	})
 })
