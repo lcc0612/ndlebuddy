@@ -147,13 +147,13 @@ describe("logic.js :: containsExclusions() test", function() {
 describe("logic.js :: substituteFirstUnknown() test", function() {
 	describe("Basic Tests", function() {
 		it("Single Question Mark, No exclusions", function() {
-			chai.assert.sameMembers(substituteFirstUnknown("?",""), Array.from(SYMBOLS))
+			chai.assert.sameMembers(Array.from(substituteFirstUnknown("?","")), Array.from(SYMBOLS))
 		})
 		it("Single Question Mark, All excluded", function() {
 			chai.assert.isEmpty(substituteFirstUnknown("?", SYMBOLS))
 		})
 		it("Single Question Mark, Some exclusions", function() {
-			chai.assert.sameMembers(substituteFirstUnknown("?", "24567+-"), ["1","3","8","9","0","*","/","="])
+			chai.assert.sameMembers(Array.from(substituteFirstUnknown("?", "24567+-")), Array.from(["1","3","8","9","0","*","/","="]))
 		})
 		it("Empty String", function() {
 			chai.assert.isEmpty(substituteFirstUnknown("", ""))
@@ -162,13 +162,13 @@ describe("logic.js :: substituteFirstUnknown() test", function() {
 	
 	describe("Longer strings", function() {
 		it("Second question mark not clobbered", function() {
-			chai.assert.sameMembers(substituteFirstUnknown("??", "123789+-="), ["0?","4?","5?","6?","*?","/?"])
+			chai.assert.sameMembers(Array.from(substituteFirstUnknown("??", "123789+-=")), Array.from(["0?","4?","5?","6?","*?","/?"]))
 		})
 		it("Question Mark and other symbols, all excluded", function() {
 			chai.assert.isEmpty(substituteFirstUnknown("1?", SYMBOLS))
 		})
 		it("Question Mark and other symbols, some exclusions", function() {
-			chai.assert.sameMembers(substituteFirstUnknown("1?", "345789*/="), ["10","11","12","16","1+","1-"])
+			chai.assert.sameMembers(Array.from(substituteFirstUnknown("1?", "345789*/=")), Array.from(["10","11","12","16","1+","1-"]))
 		})
 		it("Multiple question marks, all excluded", function() {
 			chai.assert.isEmpty(substituteFirstUnknown("???", SYMBOLS))

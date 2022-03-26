@@ -32,11 +32,11 @@ function generatePossibilities(code, exclude, musthave) {
 	For specifications, refer to generatePossibilities() above
 */
 function generatePossibilitiesRecur(code, exclude, musthave) {
-	if (exclude == null) exclude = []
-	if (musthave == null) musthave = []
+	if (exclude == null) exclude = new Set()
+	if (musthave == null) musthave = new Set()
 	
 	if (!isValid(code)) {
-		return []
+		return new Set()
 	}
 	
 	if (validForShortcutSolve(code)) {
@@ -44,31 +44,34 @@ function generatePossibilitiesRecur(code, exclude, musthave) {
 			code = shortcutSolve(code)
 		}
 		catch (err) {
-			return []
+			return new Set()
 		}
 	}
 	
 	if (containsExclusions(code, exclude)) {
-		return []
+		return new Set()
 	}
 	
 	if (cannotAttainMusthaves(code, musthave)) {
-		return []
+		return new Set()
 	}
 	
-	if (!code.includes("?")) {
+	if (code.indexOf("?") == -1) {
 		if (isCorrect(code)) {
-			return [code]
+			return new Set().add(code)
 		}
 		else {
-			return []
+			return new Set()
 		}
 	}
 	
-	var results = []
+	var results = new Set()
 	var substitutions = substituteFirstUnknown(code, exclude)
 	for (var possibleCode of substitutions) {
-		results = results.concat(generatePossibilitiesRecur(possibleCode, exclude, musthave))
+		var res = generatePossibilitiesRecur(possibleCode, exclude, musthave)
+		for (var c of res) {
+			results = results.add(c)
+		}
 	}
 	return results
 }
@@ -99,7 +102,7 @@ function isValid(code) {
 	}
 	
 	// 3. The first character cannot be a non-unary operator
-	if (["*", "/", "="].includes(code[0])) {
+	if (code[0] == "*" || code[0] == "/" || code[0] == "=") {
 		return false
 	}
 	
@@ -116,7 +119,7 @@ function isValid(code) {
 	// TODO: The case of multiple unary operators is not handled here
 	if (equalsSignCount == 1) {
 		var tokens = code.split("=")
-		if (OPERATORS.has(tokens[1]) && !["+","-"].includes(tokens[1])) {
+		if (OPERATORS.has(tokens[1]) && tokens[1] != "+" && tokens[1] != "-") {
 			return false
 		}
 		for (var c of tokens[1].substring(1)) {
@@ -160,7 +163,6 @@ function isCorrect(code) {
 */
 function stripLeadingZeros(code) {
 	var output = ""
-	var operators = ["+","-","*","/","="]
 	var acceptable = false
 	var prev = ""
 	
@@ -201,8 +203,9 @@ function stripLeadingZeros(code) {
 		containsExclusions("1+1=2", "2") returns true because "2" is present in the exclusion list
 */
 function containsExclusions(code, exclude) {
+	exclude = new Set(exclude)
 	for (var c of code) {
-		if (exclude.includes(c)) {
+		if (exclude.has(c)) {
 			return true
 		}
 	}
@@ -218,12 +221,12 @@ function containsExclusions(code, exclude) {
 		returns ["1+1=?", "1+2=?", "1+8=?", "1+9=?", "1+0=?", "1++=?", "1+*=?", "1+/=?", "1+==?"]
 */
 function substituteFirstUnknown(code, exclude) {
-	var results = []
+	var results = new Set()
 	var qnMarkIdx = code.indexOf("?")
-	exclude = Array.from(exclude)
+	exclude = new Set(exclude)
 	
 	if (qnMarkIdx == -1) {
-		return []
+		return new Set()
 	}
 	
 	var prev
@@ -236,7 +239,9 @@ function substituteFirstUnknown(code, exclude) {
 	}
 	
 	if (OPERATORS.has(prev) || OPERATORS.has(next)) {
-		exclude = exclude.concat(["*","/","="])
+		exclude = exclude.add("*")
+		exclude = exclude.add("/")
+		exclude = exclude.add("=")
 	}
 	
 	var left = code.substring(0,qnMarkIdx)
@@ -248,10 +253,10 @@ function substituteFirstUnknown(code, exclude) {
 	}
 	
 	for (var c of symbolsToExplore) {
-		results.push(left + c + right)
+		results.add(left + c + right)
 	}
 	
-	return Array.from(results)
+	return results
 }
 
 /*	validForShortcutSolve returns true if all of the following conditions are met:
@@ -268,11 +273,11 @@ function validForShortcutSolve(code) {
 	}
 	
 	var tokens = code.split("=")
-	if (tokens[0].includes("?")) {
+	if (tokens[0].indexOf("?") != -1) {
 		return false
 	}
 	
-	if (!tokens[1].includes("?")) {
+	if (tokens[1].indexOf("?") == -1) {
 		return false
 	}
 	
@@ -293,7 +298,7 @@ function shortcutSolve(code) {
 		throw "The answer does not fit in the space given"
 	}
 	
-	if (ans.includes(".")) {
+	if (ans.indexOf(".") != -1) {
 		throw "The answer contains decimals"
 	}
 	
@@ -325,7 +330,7 @@ function cannotAttainMusthaves(code, musthave) {
 	var numQnMarks = strCount(code, "?")
 	var numMusthavesUnmet = musthave.length
 	for (var c of musthave) {
-		if (code.includes(c)) {
+		if (code.indexOf(c) != -1) {
 			numMusthavesUnmet -= 1
 		}
 	}
