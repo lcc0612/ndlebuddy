@@ -2,6 +2,13 @@
 	General utilities that don't pertain specifically to the problem solving in this domain, but makes life easier somehow.
 */
 
+// CONSTANTS
+var PRIORITY_OPENING = 1
+var PRIORITY_STANDARD = 2
+var PRIORITY_WEIRD = 3
+var PRIORITY_ENUM = [PRIORITY_OPENING, PRIORITY_STANDARD, PRIORITY_WEIRD]
+
+
 /*	strCount counts the number of occurences of a substring in a string
 	Parameters:
 		haystack - Input string to count within
