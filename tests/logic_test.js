@@ -348,3 +348,90 @@ describe("logic.js :: cannotAttainMusthaves() test", function() {
 		})
 	})
 })
+
+describe("logic.js :: hasUnaryOperators() test", function() {
+	describe("Simple Tests", function() {
+		it("No unary operators", function() {
+			chai.assert.isFalse(hasUnaryOperators("1"))
+		})
+		it("Simple negation", function() {
+			chai.assert.isTrue(hasUnaryOperators("-1"))
+		})
+	})
+	
+	describe("Equations", function() {
+		it("Simple equation no negation", function() {
+			chai.assert.isFalse(hasUnaryOperators("1+1=2"))
+		})
+		it("Simple equation negation at start", function() {
+			chai.assert.isTrue(hasUnaryOperators("-1+1=2"))
+		})
+		it("Simple equation unary in middle", function() {
+			chai.assert.isTrue(hasUnaryOperators("1++1=2"))
+		})
+		it("Simple equation unary after equals", function() {
+			chai.assert.isTrue(hasUnaryOperators("1+1=+2"))
+		})
+	})
+})
+
+describe("logic.js :: hasLeadingZeros() test", function() {
+	describe("Simple Tests", function() {
+		it("Simple number no leading zeros", function() {
+			chai.assert.isFalse(hasLeadingZeros("1"))
+		})
+		it("Simple number with leading zeros", function() {
+			chai.assert.isTrue(hasLeadingZeros("001"))
+		})
+		it("Simple number with unary and leading zeros", function() {
+			chai.assert.isTrue(hasLeadingZeros("-001"))
+		})
+	})
+	
+	describe("Equations", function() {
+		it("No leading zeros at all", function() {
+			chai.assert.isFalse(hasLeadingZeros("1+1=2"))
+		})
+		it("Leading zero at beginning", function() {
+			chai.assert.isTrue(hasLeadingZeros("001+1=2"))
+		})
+		it("Leading zero after equals sign", function() {
+			chai.assert.isTrue(hasLeadingZeros("1+1=002"))
+		})
+		it("Multiple leading zeros", function() {
+			chai.assert.isTrue(hasLeadingZeros("00001+01=002"))
+		})
+	})
+})
+
+describe("logic.js :: hasUniqueCharacters() test", function() {
+	describe("Simple tests", function() {
+		it("No characters is unique", function() {
+			chai.assert.isTrue(hasUniqueCharacters(""))
+		})
+		it("One character is unique", function() {
+			chai.assert.isTrue(hasUniqueCharacters("1"))
+		})
+		it("Two distinct characters are unique", function() {
+			chai.assert.isTrue(hasUniqueCharacters("12"))
+		})
+		it("Two distinct operators are unique", function() {
+			chai.assert.isTrue(hasUniqueCharacters("+-"))
+		})
+		it("Two repeated numbers", function() {
+			chai.assert.isFalse(hasUniqueCharacters("11"))
+		})
+		it("Two repeated symbols", function() {
+			chai.assert.isFalse(hasUniqueCharacters("**"))
+		})
+	})
+	
+	describe("Equations", function() {
+		it("Full equation, unique", function() {
+			chai.assert.isTrue(hasUniqueCharacters("1+2=3"))
+		})
+		it("Full equation, not unique", function() {
+			chai.assert.isFalse(hasUniqueCharacters("1+1=3"))
+		})
+	})
+})

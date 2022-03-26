@@ -357,17 +357,32 @@ function determinePriority(code) {
 		The given code must be valid (per isValid) and correct (per isCorrect)
 */
 function hasUnaryOperators(code) {
-	// TODO: Implement function
+	if (code[0] == "-" || code[0] == "+") return true
+	
+	var prevIsOp = false
+	for (var c of code) {
+		var isOp = OPERATORS.includes(c)
+		
+		if (!isOp) {
+			prevIsOp = false
+		}
+		else if (!prevIsOp && isOp) {
+			prevIsOp = true
+		}
+		else if (prevIsOp && isOp) {
+			return true
+		}
+	}
 	return false
 }
 
 /*	hasLeadingZeros returns whether any term in a given code has leading zeros
+	Note that this function relies on correct implementation of stripLeadingZeros()
 	Prerequisites:
 		The given code must be valid (per isValid) and correct (per isCorrect), without "?"s
 */
 function hasLeadingZeros(code) {
-	// TODO: Implement function
-	return false
+	return stripLeadingZeros(code).length < code.length
 }
 
 /*	hasUniqueCharacters returns whether every character in an equation is unique
@@ -375,6 +390,12 @@ function hasLeadingZeros(code) {
 		The given code must be valid (per isValid) and correct (per isCorrect)
 */
 function hasUniqueCharacters(code) {
-	// TODO: Implement function
-	return false
+	var seen = []
+	for (var c of code) {
+		if (seen.includes(c)) {
+			return false
+		}
+		seen.push(c)
+	}
+	return true
 }

@@ -68,3 +68,32 @@ describe("Integration :: Speed Tests", function() {
 		chai.assert.sameMembers(generatePossibilities("?????", "0123", "+="), ['4+4=8', '4+5=9', '5+4=9'])
 	})
 })
+
+describe("Integration :: determinePriority()", function() {
+	describe("PRIORITY_OPENING", function() {
+		it("1+2=3", function() {
+			chai.assert.equal(determinePriority("1+2=3"), PRIORITY_OPENING)
+		})
+		it("34*15/2=6", function() {
+			chai.assert.equal(determinePriority("34*15/2=6"), PRIORITY_OPENING)
+		})
+	})
+	
+	describe("PRIORITY_STANDARD", function() {
+		it("1+1=2", function() {
+			chai.assert.equal(determinePriority("1+1=2"), PRIORITY_STANDARD)
+		})
+		it("1+2*3/4=1234", function() {
+			chai.assert.equal(determinePriority("1+2*3/4=1234"), PRIORITY_STANDARD)
+		})
+	})
+	
+	describe("PRIORITY_WEIRD", function() {
+		it("1+-2=3", function() {
+			chai.assert.equal(determinePriority("1+-2=3"), PRIORITY_WEIRD)
+		})
+		it("002+1=0003", function() {
+			chai.assert.equal(determinePriority("002+1=0003"), PRIORITY_WEIRD)
+		})
+	})
+})
