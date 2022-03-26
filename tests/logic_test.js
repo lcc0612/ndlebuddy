@@ -147,7 +147,7 @@ describe("logic.js :: containsExclusions() test", function() {
 describe("logic.js :: substituteFirstUnknown() test", function() {
 	describe("Basic Tests", function() {
 		it("Single Question Mark, No exclusions", function() {
-			chai.assert.sameMembers(substituteFirstUnknown("?",""), SYMBOLS)
+			chai.assert.sameMembers(substituteFirstUnknown("?",""), Array.from(SYMBOLS))
 		})
 		it("Single Question Mark, All excluded", function() {
 			chai.assert.isEmpty(substituteFirstUnknown("?", SYMBOLS))

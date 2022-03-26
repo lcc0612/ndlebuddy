@@ -3,8 +3,8 @@
 	Should only work with strings and lists and have no coupling with the UI or controller
 */
 
-const SYMBOLS = ["0","1","2","3","4","5","6","7","8","9","+","-","*","/","="]
-const OPERATORS = ["+","-","*","/","="]
+const SYMBOLS = new Set(["0","1","2","3","4","5","6","7","8","9","+","-","*","/","="])
+const OPERATORS = new Set(["+","-","*","/","="])
 
 /*	generatePossibilities returns a list of all possible solutions for any given puzzle state
 	Parameters:
@@ -77,7 +77,7 @@ function generatePossibilitiesRecur(code, exclude, musthave) {
 */
 function hasIllegalCharacters(code) {
 	for (var c of code) {
-		if (!SYMBOLS.includes(c) && c != "?") {
+		if (!SYMBOLS.has(c) && c != "?") {
 			return true
 		}
 	}
@@ -94,7 +94,7 @@ function isValid(code) {
 	// Rule 1 has now been extracted into hasIllegalCharacters(), but the numbering will remain
 	
 	// 2. The last character cannot be an operator
-	if (OPERATORS.includes(code[code.length - 1])) {
+	if (OPERATORS.has(code[code.length - 1])) {
 		return false
 	}
 	
@@ -116,11 +116,11 @@ function isValid(code) {
 	// TODO: The case of multiple unary operators is not handled here
 	if (equalsSignCount == 1) {
 		var tokens = code.split("=")
-		if (OPERATORS.includes(tokens[1]) && !["+","-"].includes(tokens[1])) {
+		if (OPERATORS.has(tokens[1]) && !["+","-"].includes(tokens[1])) {
 			return false
 		}
 		for (var c of tokens[1].substring(1)) {
-			if (OPERATORS.includes(c)) {
+			if (OPERATORS.has(c)) {
 				return false
 			}
 		}
@@ -168,11 +168,11 @@ function stripLeadingZeros(code) {
 		if (acceptable) {
 			output += c
 			
-			if (operators.includes(c)) {
+			if (OPERATORS.has(c)) {
 				acceptable = false
 			}
 		}
-		else if (!acceptable && operators.includes(c)) {
+		else if (!acceptable && OPERATORS.has(c)) {
 			if (prev == "0") {
 				output += "0" + c
 			}
@@ -180,7 +180,7 @@ function stripLeadingZeros(code) {
 				output += c
 			}
 		}
-		else if (!acceptable && !operators.includes(c) && c != 0) {
+		else if (!acceptable && !OPERATORS.has(c) && c != 0) {
 			acceptable = true
 			output += c
 		}
@@ -220,6 +220,7 @@ function containsExclusions(code, exclude) {
 function substituteFirstUnknown(code, exclude) {
 	var results = []
 	var qnMarkIdx = code.indexOf("?")
+	exclude = Array.from(exclude)
 	
 	if (qnMarkIdx == -1) {
 		return []
@@ -234,22 +235,23 @@ function substituteFirstUnknown(code, exclude) {
 		next = code[qnMarkIdx + 1]
 	}
 	
-	if (OPERATORS.includes(prev) || OPERATORS.includes(next)) {
+	if (OPERATORS.has(prev) || OPERATORS.has(next)) {
 		exclude = exclude.concat(["*","/","="])
 	}
 	
 	var left = code.substring(0,qnMarkIdx)
 	var right = code.substring(qnMarkIdx+1)
 	
-	var symbolsToExplore = SYMBOLS.filter(function(value, index, arr) {
-		return !exclude.includes(value)
-	})
+	var symbolsToExplore = new Set(SYMBOLS)
+	for (var elem of exclude) {
+		symbolsToExplore.delete(elem)
+	}
 	
 	for (var c of symbolsToExplore) {
 		results.push(left + c + right)
 	}
 	
-	return results
+	return Array.from(results)
 }
 
 /*	validForShortcutSolve returns true if all of the following conditions are met:
