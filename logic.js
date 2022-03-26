@@ -329,3 +329,52 @@ function cannotAttainMusthaves(code, musthave) {
 	}
 	return numQnMarks < numMusthavesUnmet 
 }
+
+
+var PRIORITY_OPENING = 1
+var PRIORITY_STANDARD = 2
+var PRIORITY_WEIRD = 3
+
+/*	determinePriority classes an equation into one of four "levels" as follows:
+		1. PRIORITY_OPENING - Favored for having unique symbols in the entire equation, must not be "weird"
+		2. PRIORITY_STANDARD - Neither an opening, nor "weird"
+		3. PRIORITY_WEIRD - Uses unary operators or leading zeros
+	Prerequisites:
+		The given code must be valid (per isValid) and correct (per isCorrect), without "?"s
+*/
+function determinePriority(code) {
+	if (hasUnaryOperators(code) || hasLeadingZeros(code)) {
+		return PRIORITY_WEIRD
+	}
+	if (hasUniqueCharacters(code)) {
+		return PRIORITY_OPENING
+	}
+	return PRIORITY_STANDARD
+}
+
+/*	hasUnaryOperators returns whether unary operators are present in a given code
+	Prerequisites:
+		The given code must be valid (per isValid) and correct (per isCorrect)
+*/
+function hasUnaryOperators(code) {
+	// TODO: Implement function
+	return false
+}
+
+/*	hasLeadingZeros returns whether any term in a given code has leading zeros
+	Prerequisites:
+		The given code must be valid (per isValid) and correct (per isCorrect), without "?"s
+*/
+function hasLeadingZeros(code) {
+	// TODO: Implement function
+	return false
+}
+
+/*	hasUniqueCharacters returns whether every character in an equation is unique
+	Prerequisites:
+		The given code must be valid (per isValid) and correct (per isCorrect)
+*/
+function hasUniqueCharacters(code) {
+	// TODO: Implement function
+	return false
+}
