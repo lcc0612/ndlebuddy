@@ -25,7 +25,10 @@ function generatePossibilities(code, exclude, musthave) {
 		throw "There are unacceptable characters in the code!"
 	}
 	
-	return generatePossibilitiesRecur(code, exclude, musthave)
+	var ans = generatePossibilitiesRecur(code, exclude, musthave)
+	ans = sortByPriority(ans)
+	
+	return ans
 }
 
 /*	generatePossibilitiesRecur is the heavy-lifting recursive function that drives the program
@@ -398,4 +401,15 @@ function hasUniqueCharacters(code) {
 		seen.push(c)
 	}
 	return true
+}
+
+/*	sortByPriority returns a dictionary containing all codes given, but sorted per the priority system above
+	Parameters:
+		- codes: An array of codes
+	Returns:
+		- A dictionary with the keys PRIORITY_OPENING, PRIORITY_STANDARD and PRIORITY_WEIRD, associated to arrays containing codes with the stated priority
+*/
+function sortByPriority(codes) {
+	// TODO: Implement Function
+	return codes
 }
