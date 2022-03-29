@@ -7,6 +7,11 @@ const SYMBOLS = ["1","2","3","4","5","6","7","8","9","0","+","-","*","/","="]
 const OPERATORS = ["+","-","*","/","="]
 
 /*	generatePossibilities returns a list of all possible solutions for any given puzzle state
+	The solutions are returned as a dictionary of priorities associated with the answers, with the following priority rules:
+		1. PRIORITY_OPENING - Favored for having unique symbols in the entire equation, must not be "weird"
+		2. PRIORITY_STANDARD - Neither an opening, nor "weird"
+		3. PRIORITY_WEIRD - Uses unary operators or leading zeros
+
 	Parameters:
 		code - A string representing the current puzzle state, with unknowns marked as "?"
 			   The puzzle size is determined from the length of this string
@@ -17,15 +22,22 @@ const OPERATORS = ["+","-","*","/","="]
 		This function is merely a wrapper about generatePossibilitiesRecur(), to address problems that only crop up once
 		
 	Example use case:
-		generatePossibilities("?+?=8", exclude="7", musthave="")
-		returns ["0+8=8", "2+6=8", "3+5=8", "4+4=8", "5+3=8", "6+2=8", "8+0=8"]
+		generatePossibilities("?+?=??", "2345", "18")
+		returns {
+			PRIORITY_OPENING: ["8+9=17", "9+8=17"],
+			PRIORITY_STANDARD: ["8+8=16", "9+9=18"],
+			PRIORITY_WEIRD: ["1+7=08", "1+8=09", "7+1=08", "8+1=09"]
+		}
 */
 function generatePossibilities(code, exclude, musthave) {
 	if (hasIllegalCharacters(code)) {
 		throw "There are unacceptable characters in the code!"
 	}
 	
-	return generatePossibilitiesRecur(code, exclude, musthave)
+	var ans = generatePossibilitiesRecur(code, exclude, musthave)
+	ans = sortByPriority(ans)
+	
+	return ans
 }
 
 /*	generatePossibilitiesRecur is the heavy-lifting recursive function that drives the program
@@ -328,4 +340,90 @@ function cannotAttainMusthaves(code, musthave) {
 		}
 	}
 	return numQnMarks < numMusthavesUnmet 
+}
+
+
+/*	determinePriority classes an equation into one of four "levels" as follows:
+		1. PRIORITY_OPENING - Favored for having unique symbols in the entire equation, must not be "weird"
+		2. PRIORITY_STANDARD - Neither an opening, nor "weird"
+		3. PRIORITY_WEIRD - Uses unary operators or leading zeros
+		// TODO: Include zero operands under "weird"
+	Prerequisites:
+		The given code must be valid (per isValid) and correct (per isCorrect), without "?"s
+*/
+function determinePriority(code) {
+	if (hasUnaryOperators(code) || hasLeadingZeros(code)) {
+		return PRIORITY_WEIRD
+	}
+	if (hasUniqueCharacters(code)) {
+		return PRIORITY_OPENING
+	}
+	return PRIORITY_STANDARD
+}
+
+/*	hasUnaryOperators returns whether unary operators are present in a given code
+	Prerequisites:
+		The given code must be valid (per isValid) and correct (per isCorrect)
+*/
+function hasUnaryOperators(code) {
+	if (code[0] == "-" || code[0] == "+") return true
+	
+	var prevIsOp = false
+	for (var c of code) {
+		var isOp = OPERATORS.includes(c)
+		
+		if (!isOp) {
+			prevIsOp = false
+		}
+		else if (!prevIsOp && isOp) {
+			prevIsOp = true
+		}
+		else if (prevIsOp && isOp) {
+			return true
+		}
+	}
+	return false
+}
+
+/*	hasLeadingZeros returns whether any term in a given code has leading zeros
+	Note that this function relies on correct implementation of stripLeadingZeros()
+	Prerequisites:
+		The given code must be valid (per isValid) and correct (per isCorrect), without "?"s
+*/
+function hasLeadingZeros(code) {
+	return stripLeadingZeros(code).length < code.length
+}
+
+/*	hasUniqueCharacters returns whether every character in an equation is unique
+	Prerequisites:
+		The given code must be valid (per isValid) and correct (per isCorrect)
+*/
+function hasUniqueCharacters(code) {
+	var seen = []
+	for (var c of code) {
+		if (seen.includes(c)) {
+			return false
+		}
+		seen.push(c)
+	}
+	return true
+}
+
+/*	sortByPriority returns a dictionary containing all codes given, but sorted per the priority system above
+	Parameters:
+		- codes: An array of codes
+	Returns:
+		- A dictionary with the keys PRIORITY_OPENING, PRIORITY_STANDARD and PRIORITY_WEIRD, associated to arrays containing codes with the stated priority
+*/
+function sortByPriority(codes) {
+	var result = {}
+	result[PRIORITY_OPENING] = []
+	result[PRIORITY_STANDARD] = []
+	result[PRIORITY_WEIRD] = []
+	
+	for (var c of codes) {
+		var priority = determinePriority(c)
+		result[priority].push(c)
+	}
+	return result
 }

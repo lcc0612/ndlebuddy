@@ -2,6 +2,11 @@
 	Contains code to drive the GUI, primarily for responding to user interactions and calling the appropriate functions from logic.js
 */
 
+const PRIORITY_DESCRIPTOR_STRINGS = {}
+PRIORITY_DESCRIPTOR_STRINGS[PRIORITY_OPENING] = "Good Candidates for Openings"
+PRIORITY_DESCRIPTOR_STRINGS[PRIORITY_STANDARD] = "Good Overall Candidates"
+PRIORITY_DESCRIPTOR_STRINGS[PRIORITY_WEIRD] = "Weirder Candidates"
+
 // Global variables representing HTML elements
 var queryDiv
 var queryControlsDiv
@@ -79,36 +84,45 @@ function guess() {
 	}
 	
 	var answers = generatePossibilities(query, excludes, musthaves)
+	resultDiv.innerHTML = ""
 	
-	var table = document.createElement("table")
-	for (var i=0; i<answers.length; i+=4) {
-		var row = document.createElement("tr")
-		for (var j=i; j<i+4 && j<answers.length; j+=1) {
-			var cell = document.createElement("td")
-			for (var k=0; k<answers[j].length; k+=1) {
-				var c = answers[j][k]
-				var charSpan = document.createElement("span")
-				charSpan.innerHTML = c
-				if (isFixed[k]) {
-					charSpan.setAttribute("class", "output-lozenge output-lozenge-fixed")
-				}
-				else {
-					if (musthaves.includes(c)) {
-						charSpan.setAttribute("class", "output-lozenge output-lozenge-musthave")
+	for (var priority of PRIORITY_ENUM) {
+		var segment = answers[priority]
+		if (segment.length == 0) continue
+		
+		var heading = document.createElement("h2")
+		heading.innerHTML = PRIORITY_DESCRIPTOR_STRINGS[priority]
+		resultDiv.appendChild(heading)
+		
+		var table = document.createElement("table")
+		for (var i=0; i<segment.length; i+=4) {
+			var row = document.createElement("tr")
+			for (var j=i; j<i+4 && j<segment.length; j+=1) {
+				var cell = document.createElement("td")
+				for (var k=0; k<segment[j].length; k+=1) {
+					var c = segment[j][k]
+					var charSpan = document.createElement("span")
+					charSpan.innerHTML = c
+					if (isFixed[k]) {
+						charSpan.setAttribute("class", "output-lozenge output-lozenge-fixed")
 					}
 					else {
-						charSpan.setAttribute("class", "output-lozenge")
+						if (musthaves.includes(c)) {
+							charSpan.setAttribute("class", "output-lozenge output-lozenge-musthave")
+						}
+						else {
+							charSpan.setAttribute("class", "output-lozenge")
+						}
 					}
+					cell.appendChild(charSpan)
 				}
-				cell.appendChild(charSpan)
+				row.appendChild(cell)
 			}
-			row.appendChild(cell)
+			table.appendChild(row)
 		}
-		table.appendChild(row)
+		resultDiv.append(table)
 	}
 	
-	resultDiv.innerHTML = ""
-	resultDiv.append(table)
 }
 
 
