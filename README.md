@@ -2,10 +2,16 @@
 
 A web-based tool to help you enumerate possibilities (not solve!) a popular equation-based guessing game.
 
-No dependencies, no web connectivity. All the magic happens in your browser.
+No dependencies, no web connectivity (except for the unit tests). All the magic happens in your browser.
+
+This project is mostly built for fun, though I have since created a video to discuss some software engineering techniques that were applied here, generally aimed at beginners or those new to programming and software engineering in general. Check it out if you're interested!
+
+https://www.youtube.com/watch?v=OYs8CpVcuo0
 
 
 ## How to Use
+
+Download the contents of this repository by clicking on Code -> Download ZIP, then extract the zip file. (Alternatively, clone this repository onto your disk.)
 
 Open ```main.html``` in the web browser of your choice.
 
@@ -16,10 +22,13 @@ You may also want to set some conditions under the **Select Conditions** heading
 
 ## Unit Tests
 
-Run ```tests.html``` in your browser to perform unit testing. This file fetches resources, namely [The Chai Assertion Library](https://www.chaijs.com/) and [Mocha](https://mochajs.org/) to facilitate unit testing.
+Run ```tests.html``` in your browser to perform unit testing. This file fetches resources, namely [The Chai Assertion Library](https://www.chaijs.com/) and [Mocha](https://mochajs.org/) to facilitate unit testing. These packages are fetched from https://unpkg.com/.
 
 
 ## Version History
+
+### Release Candidate 3
+* Final version as shown in the video. Now has a priority system to rank the value of the guesses given.
 
 ### Release Candidate 2
 * Some optimizations added, up to 5 unknowns can be done in a reasonable amount of time on a modern system
@@ -30,10 +39,10 @@ Run ```tests.html``` in your browser to perform unit testing. This file fetches 
 * Program may not be optimized, searches with more than 4 unknowns are not recommended
 
 
-## Future Work
+## Not Yet Implemented
 
-* Priority System
-  * Implement some way of discerning between whether certain outputs are good or bad, and present them in the order of most viable first
+The following features have not been implemented in this project, but would be good to have!
+
 * Positioned Exclusions
   * Implement some mechanism to ignore eliminated possibilities for each digit
 * Processing Complexity Estimation
